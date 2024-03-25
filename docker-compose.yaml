@@ -6,17 +6,17 @@ services:
     build: 
       context: ./node
     tty: true
-    ports:
-      - "3000:3000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - appnet
     
+    
   db:
+    container_name: db
     image: mysql:5.7
     command: --innodb-use-native-aio=0
-    container_name: db
     restart: always
     tty: true
     environment:
@@ -26,6 +26,26 @@ services:
       - MYSQL_USER=jose
     networks:
       - appnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    tty: true
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+      - db
+    networks:
+      - appnet
+    
 
 networks:
   appnet:
