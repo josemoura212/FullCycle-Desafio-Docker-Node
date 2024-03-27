@@ -60,7 +60,7 @@ async function listNames(res, connection) {
     const names = results.map((result) => result.name);
 
     res.send(
-      `<h1>Full Cycle Rocks!</h1><ul>${names
+      `<h1>Full Cycle Rocks!!</h1><ul>${names
         .map((name) => `<li>${name}</li>`)
         .join("")}</ul>`
     );

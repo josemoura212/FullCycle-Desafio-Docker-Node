@@ -2,12 +2,12 @@ FROM node:15
 
 WORKDIR /usr/src/app
 
-RUN npm install express --save
-RUN npm install mysql --save
+COPY . .
 
-COPY ./index.js .
+RUN npm install express --save && \
+    npm install body-parser --save && \
+    npm install mysql --save
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
-
+CMD [ "node", "index.js" ]
